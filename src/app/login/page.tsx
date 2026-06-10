@@ -1,7 +1,17 @@
 import { Button } from "@/components/ui/button";
+import { SignInButton } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs/server";
 import Image from "next/image";
+import { redirect } from "next/navigation";
 
-const LoginPage = () => {
+const LoginPage = async () => {
+  // valid session, redirect to dashboard
+  const { userId } = await auth();
+
+  if (userId) {
+    redirect("/");
+  }
+
   return (
     <div className="grid h-full grid-cols-2">
       <div className="mx-auto flex h-full max-w-xl flex-col justify-center p-8">
@@ -18,16 +28,19 @@ const LoginPage = () => {
           monitorar suas movimentações, e oferecer insights personalizados,
           facilitando o controle do seu orçamento.
         </p>
-        <Button variant="outline" className="mt-6">
-          <Image
-            src="/google.svg"
-            alt="Google Icon"
-            width={20}
-            height={20}
-            className="mr-2"
-          />
-          Entrar com Google
-        </Button>
+
+        <SignInButton>
+          <Button variant="outline" className="mt-6 cursor-pointer">
+            <Image
+              src="/google.svg"
+              alt="Google Icon"
+              width={20}
+              height={20}
+              className="mr-2"
+            />
+            Entrar com Google
+          </Button>
+        </SignInButton>
       </div>
       <div className="relative h-full w-full">
         <Image
