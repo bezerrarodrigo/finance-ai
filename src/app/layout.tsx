@@ -3,6 +3,7 @@ import { Geist, Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { ClerkProvider } from "@clerk/nextjs";
+import { dark } from "@clerk/ui/themes";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -39,7 +40,14 @@ export default function RootLayout({
       )}
     >
       <body className="dark flex min-h-full flex-col">
-        <ClerkProvider>{children}</ClerkProvider>
+        <ClerkProvider
+          afterSignOutUrl="/login"
+          appearance={{
+            theme: dark,
+          }}
+        >
+          {children}
+        </ClerkProvider>
       </body>
     </html>
   );
