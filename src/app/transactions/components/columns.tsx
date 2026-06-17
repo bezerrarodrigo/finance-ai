@@ -1,11 +1,13 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import {
   CategoryType,
   PaymentMethodType,
   TransactionType,
 } from "@/generated/prisma/browser";
 import { ColumnDef } from "@tanstack/react-table";
+import { Edit, Trash2Icon } from "lucide-react";
 import { TransactionTypeBadge } from "./type-badge";
 
 export type TransactionRow = {
@@ -38,7 +40,7 @@ const PAYMENT_METHOD_LABELS = {
   CREDIT_CARD: "Cartão de Crédito",
   DEBIT_CARD: "Cartão de Débito",
   BANK_TRANSFER: "Transferência Bancária",
-  MOBILE_PAYMENT: "Pagamento Móvel",
+  PIX: "Pix",
   OTHER: "Outros",
 };
 
@@ -69,13 +71,39 @@ export const transactionsColumns: ColumnDef<TransactionRow>[] = [
   {
     accessorKey: "date",
     header: "Data",
+    cell: ({ row }) => {
+      const date = new Date(row.original.date);
+      return date.toLocaleDateString("pt-BR", {
+        day: "2-digit",
+        month: "long",
+        year: "numeric",
+      });
+    },
   },
   {
     accessorKey: "amount",
     header: "Valor",
+    cell: ({ row }) => {
+      return row.original.amount.toLocaleString("pt-BR", {
+        style: "currency",
+        currency: "BRL",
+      });
+    },
   },
   {
     accessorKey: "actions",
-    header: "",
+    header: "Ações",
+    cell: ({ row }) => {
+      return (
+        <div className="flex">
+          <Button variant="ghost" size="icon">
+            <Edit className="text-muted-foreground h-4 w-4" />
+          </Button>
+          <Button variant="ghost" size="icon">
+            <Trash2Icon className="text-muted-foreground h-4 w-4" />
+          </Button>
+        </div>
+      );
+    },
   },
 ];
