@@ -1,7 +1,6 @@
 import { DataTable } from "@/components/data-table";
-import { Button } from "@/components/ui/button";
 import { prisma } from "@/lib/prisma";
-import { ArrowUpDown } from "lucide-react";
+import AddTransactionButton from "./components/add-transaction-button";
 import { TransactionRow, transactionsColumns } from "./components/columns";
 
 const TransactionsPage = async () => {
@@ -27,10 +26,7 @@ const TransactionsPage = async () => {
     <div className="space-y-6 p-6">
       <div className="flex w-full items-center justify-between">
         <h1 className="text-2xl font-bold">Transações</h1>
-        <Button className="rounded-full font-bold text-white">
-          Adicionar Transação
-          <ArrowUpDown className="" />
-        </Button>
+        <AddTransactionButton />
       </div>
       <DataTable columns={transactionsColumns} data={serializedTransactions} />
     </div>
