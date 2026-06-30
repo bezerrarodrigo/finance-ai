@@ -9,6 +9,10 @@ import {
 import { ColumnDef } from "@tanstack/react-table";
 import { Edit, Trash2Icon } from "lucide-react";
 import { TransactionTypeBadge } from "./type-badge";
+import {
+  PAYMENT_METHOD_LABELS,
+  TRANSACTION_CATEGORY_LABELS,
+} from "@/app/constants/transactions";
 
 export type TransactionRow = {
   id: string;
@@ -21,27 +25,6 @@ export type TransactionRow = {
   createdAt: string;
   updatedAt: string;
   userId: string;
-};
-
-const TRANSACTION_CATEGORY_LABELS = {
-  EDUCATION: "Educação",
-  FOOD: "Alimentação",
-  HEALTH: "Saúde",
-  HOUSING: "Moradia",
-  TRANSPORTATION: "Transporte",
-  ENTERTAINMENT: "Entretenimento",
-  OTHER: "Outros",
-  SALARY: "Salário",
-  UTILITY: "Utilidades",
-};
-
-const PAYMENT_METHOD_LABELS = {
-  CASH: "Dinheiro",
-  CREDIT_CARD: "Cartão de Crédito",
-  DEBIT_CARD: "Cartão de Débito",
-  BANK_TRANSFER: "Transferência Bancária",
-  PIX: "Pix",
-  OTHER: "Outros",
 };
 
 export const transactionsColumns: ColumnDef<TransactionRow>[] = [
