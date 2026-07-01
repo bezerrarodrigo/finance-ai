@@ -26,3 +26,24 @@ export const TRANSACTION_TYPE_OPTIONS = [
   { value: TransactionType.DEPOSIT, label: "Depósito" },
   { value: TransactionType.INVESTMENT, label: "Investimento" },
 ];
+
+export const PAYMENT_METHOD_OPTIONS = [
+  { value: "CASH", label: "Dinheiro" },
+  { value: "CREDIT_CARD", label: "Cartão de Crédito" },
+  { value: "DEBIT_CARD", label: "Cartão de Débito" },
+  { value: "BANK_TRANSFER", label: "Transferência Bancária" },
+  { value: "PIX", label: "Pix" },
+  { value: "OTHER", label: "Outros" },
+];
+
+export const CATEGORY_OPTIONS = [
+  { value: "EDUCATION", label: "Educação" },
+  { value: "FOOD", label: "Alimentação" },
+  { value: "HEALTH", label: "Saúde" },
+  { value: "HOUSING", label: "Moradia" },
+  { value: "TRANSPORTATION", label: "Transporte" },
+  { value: "ENTERTAINMENT", label: "Entretenimento" },
+  { value: "OTHER", label: "Outros" },
+  { value: "SALARY", label: "Salário" },
+  { value: "UTILITY", label: "Utilidades" },
+];

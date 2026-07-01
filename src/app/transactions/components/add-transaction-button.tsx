@@ -1,6 +1,11 @@
 "use client";
 
-import { TRANSACTION_TYPE_OPTIONS } from "@/app/constants/transactions";
+import {
+  CATEGORY_OPTIONS,
+  PAYMENT_METHOD_OPTIONS,
+  TRANSACTION_TYPE_OPTIONS,
+} from "@/app/constants/transactions";
+import { DatePicker } from "@/components/date-picker";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -14,7 +19,6 @@ import {
 } from "@/components/ui/dialog";
 import {
   Field,
-  FieldDescription,
   FieldError,
   FieldGroup,
   FieldLabel,
@@ -43,9 +47,15 @@ import * as z from "zod/v3";
 const AddTransactionSchema = z.object({
   name: z.string().trim().min(1, "O nome é obrigatório."),
   amount: z.string().trim().min(1, "O valor é obrigatório."),
-  type: z.nativeEnum(TransactionType),
-  category: z.nativeEnum(CategoryType),
-  pagamento: z.nativeEnum(PaymentMethodType),
+  type: z.nativeEnum(TransactionType, {
+    required_error: "O tipo é obrigatório.",
+  }),
+  category: z.nativeEnum(CategoryType, {
+    required_error: "A categoria é obrigatória.",
+  }),
+  pagamento: z.nativeEnum(PaymentMethodType, {
+    required_error: "O método de pagamento é obrigatório.",
+  }),
   date: z.date({ required_error: "Campo obrigatório." }),
 });
 
@@ -57,9 +67,7 @@ const AddTransactionButton = () => {
     defaultValues: {
       name: "",
       amount: "",
-      type: TransactionType.EXPENSE,
       category: CategoryType.OTHER,
-      pagamento: PaymentMethodType.CASH,
       date: new Date(),
     },
   });
@@ -84,7 +92,7 @@ const AddTransactionButton = () => {
           </DialogTitle>
           <DialogDescription>Insira as informações abaixo.</DialogDescription>
         </DialogHeader>
-        <form className="mt-5 space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
+        <form className="mt-5 space-y-8" onSubmit={form.handleSubmit(onSubmit)}>
           <FieldGroup>
             <Controller
               name="name"
@@ -147,9 +155,13 @@ const AddTransactionButton = () => {
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
                   <FieldLabel>Tipo</FieldLabel>
-                  <Select>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Tipo da transação" />
+                  <Select
+                    value={field.value}
+                    onValueChange={field.onChange}
+                    name={field.name}
+                  >
+                    <SelectTrigger aria-invalid={fieldState.invalid}>
+                      <SelectValue placeholder="Selecionar..." />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectGroup>
@@ -168,9 +180,90 @@ const AddTransactionButton = () => {
               )}
             />
           </FieldGroup>
+          <FieldGroup>
+            <Controller
+              name="category"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel>Categoria</FieldLabel>
+                  <Select
+                    value={field.value}
+                    onValueChange={field.onChange}
+                    name={field.name}
+                  >
+                    <SelectTrigger aria-invalid={fieldState.invalid}>
+                      <SelectValue placeholder="Categoria" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        {CATEGORY_OPTIONS.map((option) => (
+                          <SelectItem key={option.value} value={option.value}>
+                            {option.label}
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
+            />
+          </FieldGroup>
+          <FieldGroup>
+            <Controller
+              name="pagamento"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel>Método de pagamento</FieldLabel>
+                  <Select
+                    value={field.value}
+                    onValueChange={field.onChange}
+                    name={field.name}
+                  >
+                    <SelectTrigger aria-invalid={fieldState.invalid}>
+                      <SelectValue placeholder="Selecionar..." />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        {PAYMENT_METHOD_OPTIONS.map((option) => (
+                          <SelectItem key={option.value} value={option.value}>
+                            {option.label}
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
+            />
+          </FieldGroup>
+          <FieldGroup>
+            <Controller
+              name="date"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel>Data</FieldLabel>
+                  <DatePicker value={field.value} onChange={field.onChange} />
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
+            />
+          </FieldGroup>
           <DialogFooter className="mt-6">
             <DialogClose asChild>
-              <Button variant="outline">Cancelar</Button>
+              <Button variant="outline" onClick={() => form.reset()}>
+                Cancelar
+              </Button>
             </DialogClose>
             <Button type="submit">Adicionar</Button>
           </DialogFooter>
