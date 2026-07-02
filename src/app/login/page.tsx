@@ -32,7 +32,7 @@ const LoginPage = async () => {
         <SignInButton>
           <Button variant="outline" className="mt-6 cursor-pointer">
             <Image
-              src="/google.svg"
+              src="/gLogo.svg"
               alt="Google Icon"
               width={20}
               height={20}

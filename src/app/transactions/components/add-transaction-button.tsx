@@ -78,7 +78,13 @@ const AddTransactionButton = () => {
   };
 
   return (
-    <Dialog>
+    <Dialog
+      onOpenChange={(open) => {
+        if (!open) {
+          form.reset();
+        }
+      }}
+    >
       <DialogTrigger asChild>
         <Button className="rounded-full font-bold text-white">
           Adicionar Transação
@@ -100,15 +106,7 @@ const AddTransactionButton = () => {
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
                   <FieldLabel htmlFor="form-rhf-demo-title">Nome</FieldLabel>
-                  <NumericFormat
-                    thousandSeparator="."
-                    decimalSeparator=","
-                    prefix="R$"
-                    allowNegative={false}
-                    customInput={Input}
-                    getInputRef={field.ref}
-                    {...field}
-                  />
+                  <Input {...field} />
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
                   )}
