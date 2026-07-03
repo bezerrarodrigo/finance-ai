@@ -1,5 +1,6 @@
 "use client";
 
+import { addTransaction } from "@/app/actions/add-transaction";
 import {
   CATEGORY_OPTIONS,
   PAYMENT_METHOD_OPTIONS,
@@ -53,7 +54,7 @@ const AddTransactionSchema = z.object({
   category: z.nativeEnum(CategoryType, {
     required_error: "A categoria é obrigatória.",
   }),
-  pagamento: z.nativeEnum(PaymentMethodType, {
+  paymentMethod: z.nativeEnum(PaymentMethodType, {
     required_error: "O método de pagamento é obrigatório.",
   }),
   date: z.date({ required_error: "Campo obrigatório." }),
@@ -73,8 +74,16 @@ const AddTransactionButton = () => {
   });
 
   //functions
-  const onSubmit = (data: formSchema) => {
-    console.log(data);
+  const onSubmit = async (data: formSchema) => {
+    try {
+      const amountAsNumber = parseFloat(data.amount);
+      await addTransaction({
+        ...data,
+        amount: amountAsNumber,
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -212,7 +221,7 @@ const AddTransactionButton = () => {
           </FieldGroup>
           <FieldGroup>
             <Controller
-              name="pagamento"
+              name="paymentMethod"
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
