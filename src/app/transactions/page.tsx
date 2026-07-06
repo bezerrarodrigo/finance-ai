@@ -2,9 +2,16 @@ import { DataTable } from "@/components/data-table";
 import { prisma } from "@/lib/prisma";
 import AddTransactionButton from "./components/add-transaction-button";
 import { TransactionRow, transactionsColumns } from "./components/columns";
+import { auth } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
 
 const TransactionsPage = async () => {
   const transactions = await prisma.transaction.findMany({});
+  const { userId } = await auth();
+
+  if (!userId) {
+    redirect("/login");
+  }
 
   // Serialize the transactions to ensure string format to pass to the client components
   const serializedTransactions: TransactionRow[] = transactions.map(

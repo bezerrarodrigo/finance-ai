@@ -40,6 +40,7 @@ import {
 } from "@/generated/prisma/browser";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowUpDown } from "lucide-react";
+import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { NumericFormat } from "react-number-format";
 import * as z from "zod/v3";
@@ -63,6 +64,9 @@ const AddTransactionSchema = z.object({
 type formSchema = z.infer<typeof AddTransactionSchema>;
 
 const AddTransactionButton = () => {
+  //state
+  const [dialogIsOpen, setDialogIsDialogOpen] = useState(false);
+
   const form = useForm<formSchema>({
     resolver: zodResolver(AddTransactionSchema),
     defaultValues: {
@@ -81,14 +85,17 @@ const AddTransactionButton = () => {
         ...data,
         amount: amountAsNumber,
       });
+      setDialogIsDialogOpen(false);
+      form.reset();
     } catch (error) {
       console.log(error);
     }
   };
-
   return (
     <Dialog
+      open={dialogIsOpen}
       onOpenChange={(open) => {
+        setDialogIsDialogOpen(open);
         if (!open) {
           form.reset();
         }

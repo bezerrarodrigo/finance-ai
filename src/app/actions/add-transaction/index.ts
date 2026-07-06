@@ -4,6 +4,7 @@ import { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
 import { transactionSchema } from "./schema";
+import { revalidatePath } from "next/cache";
 
 export const addTransaction = async (
   params: Omit<Prisma.TransactionCreateInput, "userId">,
@@ -16,4 +17,5 @@ export const addTransaction = async (
   }
 
   await prisma.transaction.create({ data: { ...params, userId } });
+  revalidatePath("/transactions");
 };
