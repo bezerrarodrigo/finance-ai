@@ -1,5 +1,9 @@
 "use client";
 
+import {
+  PAYMENT_METHOD_LABELS,
+  TRANSACTION_CATEGORY_LABELS,
+} from "@/app/constants/transactions";
 import { Button } from "@/components/ui/button";
 import {
   CategoryType,
@@ -7,12 +11,9 @@ import {
   TransactionType,
 } from "@/generated/prisma/browser";
 import { ColumnDef } from "@tanstack/react-table";
-import { Edit, Trash2Icon } from "lucide-react";
+import { Trash2Icon } from "lucide-react";
+import EditTransactionButton from "./edit-transaction-button";
 import { TransactionTypeBadge } from "./type-badge";
-import {
-  PAYMENT_METHOD_LABELS,
-  TRANSACTION_CATEGORY_LABELS,
-} from "@/app/constants/transactions";
 
 export type TransactionRow = {
   id: string;
@@ -76,12 +77,10 @@ export const transactionsColumns: ColumnDef<TransactionRow>[] = [
   {
     accessorKey: "actions",
     header: "Ações",
-    cell: ({ row }) => {
+    cell: ({ row: { original: transaction } }) => {
       return (
         <div className="flex">
-          <Button variant="ghost" size="icon">
-            <Edit className="text-muted-foreground h-4 w-4" />
-          </Button>
+          <EditTransactionButton transaction={transaction} />
           <Button variant="ghost" size="icon">
             <Trash2Icon className="text-muted-foreground h-4 w-4" />
           </Button>
